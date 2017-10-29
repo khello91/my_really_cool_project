@@ -121,7 +121,7 @@ function transfer(address _to, uint256 _value) onlyPayloadSize(2 * 32) public re
   uint256 public _currentMined = 0;
 ```
 
-*(If you do this you won't need the constant functions returning these variables as marking a variable "public" automatically creates constant getter functions for the public variables)*
+*(If you do this you won't need the constant functions returning these variables as marking a variable `public` automatically creates constant getter functions for the public variables)*
 **If this is done, lines from 246 to 283 aren't needed.**
 
 * Lines 218 to 219:  
@@ -135,7 +135,7 @@ if (now < _rewardEnd && _currentMined >= _maxMiningReward){
         revert();
 }
 ```
-*(I know this will not do anything but if a programmer wants to update the code in future and for any reason he did something like:*
+*(I know this will not do anything but if a programmer wants to update the code in future and for any reason he did something like:)*
 
 ```
 if (now < _rewardEnd && _currentMined >= _maxMiningReward)
