@@ -52,7 +52,7 @@ modifier onlyPayloadSize(uint size) {
     _;  
 }  
 function transfer(address _to, uint256 _value) onlyPayloadSize(2 * 32) {  
-	// do stuff  
+    // do stuff  
 }  
 ```
 You can read more about the attack here: [ERC20 Short Address Attacks](http://vessenes.com/the-erc20-short-address-attack-explained/)
@@ -127,28 +127,28 @@ function transfer(address _to, uint256 _value) onlyPayloadSize(2 * 32) public re
 * Lines 218 to 219:  
 ```
 if (now < _rewardEnd && _currentMined >= _maxMiningReward)
-        revert();
+    revert();
 ```
 Change Above code to:
 ```
 if (now < _rewardEnd && _currentMined >= _maxMiningReward){
-        revert();
+    revert();
 }
 ```
 *(I know this will not do anything but if a programmer wants to update the code in future and for any reason he did something like:)*
 
 ```
 if (now < _rewardEnd && _currentMined >= _maxMiningReward)
-	if (someOtherCondition) doSomethingElse();
-	revert();
+    if (someOtherCondition) doSomethingElse();
+    revert();
 ```
 
 It will break everything.
 but
 ```
 if (now < _rewardEnd && _currentMined >= _maxMiningReward){
-	if (someOtherCondition) doSomethingElse();
-	revert();
+    if (someOtherCondition) doSomethingElse();
+    revert();
 }
 ```
 it will do what's expected.
