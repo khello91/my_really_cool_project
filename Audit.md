@@ -139,8 +139,8 @@ if (now < _rewardEnd && _currentMined >= _maxMiningReward){
 
 ```
 if (now < _rewardEnd && _currentMined >= _maxMiningReward)
-        if (someOtherCondition) doSomethingElse();
-        revert();
+	if (someOtherCondition) doSomethingElse();
+	revert();
 ```
 
 It will break everything.
@@ -148,11 +148,11 @@ but
 ```
 if (now < _rewardEnd && _currentMined >= _maxMiningReward){
 	if (someOtherCondition) doSomethingElse();
-    revert();
+	revert();
 }
 ```
 it will do what's expected.
-*Don't think this is a little suggestion, there have been famous bugs where a programmer forgot to put `{}` and added additional statements and the logic turned upside down 😉*
+*Don't underestimate this suggestion, there have been famous bugs where a programmer forgot to put `{}` and added additional statements and the logic turned upside down 😉*
 
 
 ## 8. Summary of the audit
