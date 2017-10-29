@@ -43,14 +43,15 @@ If the token contract has enought amount of tokens and the buy function doesn’
 The virtual machine will return 256000 for each 1000 tokens bought. This is a bug of the virtual machine that’s yet not fixed so whenever you want to buy tokens make sure to check the length of the address.
 The contract isn’t vulnerable to this attack since it doesn't have any Buy function but also it **does NOTHING to prevent** the *short address attack* during **ICO** or in an **exchange** (*it will just depend if the ICO contract or exchange server checks the length of data, if they don't, short address attacks would drain out this coin from the exchange*), here is a fix for it:
 https://www.reddit.com/r/ethereum/comments/63s917/worrysome_bug_exploit_with_erc20_token/dfwmhc3/?st=j9caq2b9&sh=23654dfc
-`modifier onlyPayloadSize(uint size) {  
+```
+modifier onlyPayloadSize(uint size) {  
      	assert(msg.data.length >= size + 4);  
      	_;  
   	}  
   	function transfer(address _to, uint256 _value) onlyPayloadSize(2 * 32) {  
     	// do stuff  
   	}  
-`
+```
 You can read more about the attack here: http://vessenes.com/the-erc20-short-address-attack-explained/
 
 ## 4. Critical vulnerabilites found in the contract
@@ -66,17 +67,20 @@ You’re specifiying a pragma version with the caret symbol (^) up front which t
 This is not a good practice since there could be major changes between versions that would make your code unstable. That’s why I recommend to set a fixed version without the caret like 0.4.11.
 
 #Lines 51 to 58: (Prevention of short address attack)
-`function transfer(address _to, uint256 _value) public returns (bool) {
+```
+function transfer(address _to, uint256 _value) public returns (bool) {
     require(_to != address(0));
     // SafeMath.sub will throw if there is not enough balance.
     balances[msg.sender] = balances[msg.sender].sub(_value);
     balances[_to] = balances[_to].add(_value);
     Transfer(msg.sender, _to, _value);
     return true;
-}`
+}
+```
 Suggestion: To prevent Short Address Attack:
 
-`modifier onlyPayloadSize(uint size) {
+```
+modifier onlyPayloadSize(uint size) {
      assert(msg.data.length >= size + 4);
      _;
 }
@@ -87,10 +91,12 @@ function transfer(address _to, uint256 _value) onlyPayloadSize(2 * 32) public re
     balances[_to] = balances[_to].add(_value);
     Transfer(msg.sender, _to, _value);
     return true;
-}`
+}
+```
 
 #Lines 161 to 168:- (no worries, the present code is good, it's optional if you want to change the following lines)
-`uint256 _miningReward = 100000000; //1 AFC - To be halved every 4 years
+```
+  uint256 _miningReward = 100000000; //1 AFC - To be halved every 4 years
   uint256 _maxMiningReward = 5000000000; //50 AFC - To be halved every 4 years
   uint256 _rewardHalvingTimePeriod = 126227704; //4 years
   uint256 _nextRewardHalving = now.add(_rewardHalvingTimePeriod);
@@ -98,10 +104,11 @@ function transfer(address _to, uint256 _value) onlyPayloadSize(2 * 32) public re
   uint256 _rewardStart = now;
   uint256 _rewardEnd = now.add(_rewardTimePeriod);
   uint256 _currentMined = 0;
-`
+```
 
 
-`uint256 public _miningReward = 100000000; //1 AFC - To be halved every 4 years
+```
+  uint256 public _miningReward = 100000000; //1 AFC - To be halved every 4 years
   uint256 public _maxMiningReward = 5000000000; //50 AFC - To be halved every 4 years
   uint256 public _rewardHalvingTimePeriod = 126227704; //4 years
   uint256 public _nextRewardHalving = now.add(_rewardHalvingTimePeriod);
@@ -109,32 +116,38 @@ function transfer(address _to, uint256 _value) onlyPayloadSize(2 * 32) public re
   uint256 public _rewardStart = now;
   uint256 public _rewardEnd = now.add(_rewardTimePeriod);
   uint256 public _currentMined = 0;
-`
+```
 
 *(If you do this you won't need the constant functions returning these variables as marking a variable "public" automatically creates constant getter functions for the public variables)*
 *If this is done, lines from 246 to 283 aren't needed.*
 
 #Lines 218 to 219:
-`if (now < _rewardEnd && _currentMined >= _maxMiningReward)
+```
+if (now < _rewardEnd && _currentMined >= _maxMiningReward)
         revert();
-`
+```
 Change Above code to:
-`if (now < _rewardEnd && _currentMined >= _maxMiningReward){
+```
+if (now < _rewardEnd && _currentMined >= _maxMiningReward){
         revert();
-}`
+}
+```
 [.][(I know this will not do anything but if a programmer wants to update the code in future and for any reason he did something like)]
 
-`if (now < _rewardEnd && _currentMined >= _maxMiningReward)
+```
+if (now < _rewardEnd && _currentMined >= _maxMiningReward)
         if (someOtherCondition) doSomethingElse();
         revert();
-`
+```
 
 It will break everything.
 but
-`if (now < _rewardEnd && _currentMined >= _maxMiningReward){
+```
+if (now < _rewardEnd && _currentMined >= _maxMiningReward){
  		if (someOtherCondition) doSomethingElse();
         revert();
- }`
+}
+```
 it will do what's expected.
 [.][Don't think this is a little suggestion, there have been famous bugs where a programmer forgot to put {} and added additional statements and the logic turned upside down ;)]
 
