@@ -117,7 +117,7 @@ function transfer(address _to, uint256 _value) onlyPayloadSize(2 * 32) public re
 ```
 
 *(If you do this you won't need the constant functions returning these variables as marking a variable "public" automatically creates constant getter functions for the public variables)*
-*If this is done, lines from 246 to 283 aren't needed.*
+**If this is done, lines from 246 to 283 aren't needed.**
 
 #Lines 218 to 219:
 ```
