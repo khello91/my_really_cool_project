@@ -43,14 +43,14 @@ If the token contract has enought amount of tokens and the buy function doesn’
 The virtual machine will return 256000 for each 1000 tokens bought. This is a bug of the virtual machine that’s yet not fixed so whenever you want to buy tokens make sure to check the length of the address.
 The contract isn’t vulnerable to this attack since it doesn't have any Buy function but also it **does NOTHING to prevent** the *short address attack* during **ICO** or in an **exchange** (*it will just depend if the ICO contract or exchange server checks the length of data, if they don't, short address attacks would drain out this coin from the exchange*), here is a fix for it:
 https://www.reddit.com/r/ethereum/comments/63s917/worrysome_bug_exploit_with_erc20_token/dfwmhc3/?st=j9caq2b9&sh=23654dfc
-```
+``` solidity
 modifier onlyPayloadSize(uint size) {  
-     	assert(msg.data.length >= size + 4);  
-     	_;  
-  	}  
-  	function transfer(address _to, uint256 _value) onlyPayloadSize(2 * 32) {  
-    	// do stuff  
-  	}  
+    assert(msg.data.length >= size + 4);  
+    _;  
+}  
+function transfer(address _to, uint256 _value) onlyPayloadSize(2 * 32) {  
+	// do stuff  
+}  
 ```
 You can read more about the attack here: http://vessenes.com/the-erc20-short-address-attack-explained/
 
