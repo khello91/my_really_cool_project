@@ -1,145 +1,175 @@
-# Introduction
-In this Smart Contract audit we’ll cover the following topics:
-1. Disclaimer
-2. Overview of the audit and nice features
-3. Attack made to the contract
-4. Critical vulnerabilites found in the contract
-5. Medium vulnerabilites found in the contract
-6. Low severity vulnerabilites found
+# [![A File Icon][img-logo]][downloads]
 
-Summary of the audit
-1. **Disclaimer**
-The audit makes no statements or warrantees about utility of the code, safety of the code, suitability of the business model, regulatory regime for the business model, or any other statements about fitness of the contracts to purpose, or their bug free status. The audit documentation is for discussion purposes only.
-2. **Overview**
-The project has only one file, the AfricaCoin.sol file which contains 289 lines of Solidity code. All the functions and state variables are well commented using the natspec documentation for the functions which is good to understand quickly how everything is supposed to work.
-*Nice Features*
-The contract provides a good suite of functionality that will be useful for the entire contract:
-It uses SafeMath library to check for overflows and underflows which is a pretty good practise, All the ERC20 functions are included it's a valid ERC20 token and in addition has some extra functionality for Mining.
+[![Install via Package Control][img-downloads]][downloads]
+[![Star on GitHub][img-stars]][stars]
+[![Make a donation at Patreon][img-patreon]][patreon]
+[![Share via Twitter][img-twitter]][twitter]
+[![Join the chat at Gitter][img-gitter]][gitter]
+[![Join the chat at Sublime Forum][img-forum]][forum]
 
-3. **Attacks made to the contract**
-#In order to check for the security of the contract, we tested several attacks in order to make sure that the contract is secure and follows best practices.
-#[1.][Over and under flows]
-An overflow happens when the limit of the type varibale uint256 , 2 ** 256, is exceeded. What happens is that the value resets to zero instead of incrementing more.
-For instance, if I want to assign a value to a uint bigger than 2 ** 256 it will simple go to 0 — this is dangerous.
-On the other hand, an underflow happens when you try to subtract 0 minus a number bigger than 0.
-For example, if you substract 0 - 1 the result will be = 2 ** 256 instead of -1.
-This is quite dangerous when dealing with ether. Hovewer This contract checks for overflows and underflows in **OpenZeppelin's** *SafeMath* and there is no instance of direct arithmetic operations.
+This package adds file-specific icons to Sublime Text for improved visual grepping. It's heavily inspired by [Atom File Icons][atom-file-icons].
 
+Its aims are:
 
+* To be a `tmPreferences` storage for UI themes those support file-specific icons.
+* To provide icons for themes those don't (fully) support file-specific icons.
 
-#[2.][Replay attack]
-The replay attack consists on making a transaction on one blockchain like the original Ethereum’s blockchain and then repeating it on another blockchain like the Ethereum’s classic blockchain.
-The ether is transfered like a normal transaction from a blockchain to another.
-Though its no longer a problem because since the version 1.5.3 of Geth and 1.4.4 of Parity both implement the attack protection EIP 155 by Vitalik Buterin: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
-So the people that will use the contract depend on their own ability to be updated with those programs to keep themselves secure.
+If you have any problems, please search for a similar issue first, before creating [a new one][new-issue]. 
 
-#[3.]**[Short address attack]**
-This attack affects ERC20 tokens, was discovered by the Golem team and consists of the following:
-A user creates an ethereum wallet with a traling 0, which is not hard because it’s only a digit. For instance: 0xiofa8d97756as7df5sd8f75g8675ds8gsdg0
-Then he buys tokens by removing the last zero:
-Buy 1000 tokens from account 0xiofa8d97756as7df5sd8f75g8675ds8gsdg
-If the token contract has enought amount of tokens and the buy function doesn’t check the length of the address of the sender, the Ethereum’s virtual machine will just add zeroes to the transaction until the address is complete.
-The virtual machine will return 256000 for each 1000 tokens bought. This is a bug of the virtual machine that’s yet not fixed so whenever you want to buy tokens make sure to check the length of the address.
+> Also, check the list of [known issues][known-issues] before doing so.
 
-The contract isn’t vulnerable to this attack since it doesn't have any Buy function but also it **does NOTHING to prevent** the *short address attack* during **ICO** or in an **exchange** (*it will just depend if the ICO contract or exchange server checks the length of data, if they don't, short address attacks would drain out this coin from the exchange*), here is a fix for it:
-https://www.reddit.com/r/ethereum/comments/63s917/worrysome_bug_exploit_with_erc20_token/dfwmhc3/?st=j9caq2b9&sh=23654dfc
-`modifier onlyPayloadSize(uint size) {
-     assert(msg.data.length >= size + 4);
-     _;
-   }
-  function transfer(address _to, uint256 _value) onlyPayloadSize(2 * 32) {
-    // do stuff
-  }`
-You can read more about the attack here: http://vessenes.com/the-erc20-short-address-attack-explained/
+## Users
 
-4. **Critical vulnerabilites found in the contract**
-There aren’t critical issues in the smart contract audited.
-5. **Medium vulnerabilites found in the contract**
-This token contract *doesn't prevent* Short Address Attacks
-6. **Low severity vulnerabilites found**
-Everything else looks good to me.
-7. **Line by line comments**
+### Getting Started
 
-#Line 1:
-You’re specifiying a pragma version with the caret symbol (^) up front which tells the compiler to use any version of solidity bigger than 0.4.11 .
-This is not a good practice since there could be major changes between versions that would make your code unstable. That’s why I recommend to set a fixed version without the caret like 0.4.11.
+[![Getting Started with A File Icon][img-getting-started]][getting-started]
 
-#Lines 51 to 58: (Prevention of short address attack)
-`function transfer(address _to, uint256 _value) public returns (bool) {
-    require(_to != address(0));
-    // SafeMath.sub will throw if there is not enough balance.
-    balances[msg.sender] = balances[msg.sender].sub(_value);
-    balances[_to] = balances[_to].add(_value);
-    Transfer(msg.sender, _to, _value);
-    return true;
-}`
-Suggestion: To prevent Short Address Attack:
+### Installation
 
-`modifier onlyPayloadSize(uint size) {
-     assert(msg.data.length >= size + 4);
-     _;
-}
-function transfer(address _to, uint256 _value) onlyPayloadSize(2 * 32) public returns (bool) {
-    require(_to != address(0));
-    // SafeMath.sub will throw if there is not enough balance.
-    balances[msg.sender] = balances[msg.sender].sub(_value);
-    balances[_to] = balances[_to].add(_value);
-    Transfer(msg.sender, _to, _value);
-    return true;
-}`
+#### Package Control
 
-#Lines 161 to 168:- (no worries, the present code is good, it's optional if you want to change the following lines)
-`uint256 _miningReward = 100000000; //1 AFC - To be halved every 4 years
-  uint256 _maxMiningReward = 5000000000; //50 AFC - To be halved every 4 years
-  uint256 _rewardHalvingTimePeriod = 126227704; //4 years
-  uint256 _nextRewardHalving = now.add(_rewardHalvingTimePeriod);
-  uint256 _rewardTimePeriod = 600; //10 minutes
-  uint256 _rewardStart = now;
-  uint256 _rewardEnd = now.add(_rewardTimePeriod);
-  uint256 _currentMined = 0;
-`
+The easiest way to install is using Sublime's [Package Control][downloads]. It's listed as `A File Icon`.
 
+1. Open `Command Palette` using menu item `Tools → Command Palette...`
+2. Choose `Package Control: Install Package`
+3. Find `A File Icon` and hit `Enter`
 
-`uint256 public _miningReward = 100000000; //1 AFC - To be halved every 4 years
-  uint256 public _maxMiningReward = 5000000000; //50 AFC - To be halved every 4 years
-  uint256 public _rewardHalvingTimePeriod = 126227704; //4 years
-  uint256 public _nextRewardHalving = now.add(_rewardHalvingTimePeriod);
-  uint256 public _rewardTimePeriod = 600; //10 minutes
-  uint256 public _rewardStart = now;
-  uint256 public _rewardEnd = now.add(_rewardTimePeriod);
-  uint256 public _currentMined = 0;
-`
+#### Download
 
-*(If you do this you won't need the constant functions returning these variables as marking a variable "public" automatically creates constant getter functions for the public variables)*
-*If this is done, lines from 246 to 283 aren't needed.*
+1. [Download the `.zip`][release]
+2. Unzip and rename folder to `A File Icon`
+3. Copy folder into `Packages` directory, which you can find using the menu item `Preferences → Browse Packages...`
 
-#Lines 218 to 219:
-`if (now < _rewardEnd && _currentMined >= _maxMiningReward)
-        revert();
-`
-Change Above code to:
-`if (now < _rewardEnd && _currentMined >= _maxMiningReward){
-        revert();
-}`
-[.][(I know this will not do anything but if a programmer wants to update the code in future and for any reason he did something like)]
+> **Note:** Don't forget to restart Sublime Text after installing this package. 
 
-`if (now < _rewardEnd && _currentMined >= _maxMiningReward)
-        (if someOtherCondition) doSomethingElse;
-        revert();
-`
+### Customization
 
-It will break everything.
-but
-`if (now < _rewardEnd && _currentMined >= _maxMiningReward){
- 		(if someOtherCondition) doSomethingElse;
-        revert();
- }`
-it will do what's expected.
-[.][Don't think this is a little suggestion, there have been famous bugs where a programmer forgot to put {} and added additional statements and the logic turned upside down ;)]
+You can change the color, opacity level and size of the icons by modifying your user preferences file, which you can find by:
 
+* `Preferences → Package Settings → A File Icon → Settings`,
+* Choose `A File Icon: Settings` in `Command Palette`.
 
-8. **Summary of the audit**
-Overall the code is well commented and clear on what it’s supposed to do for each function.
-The mechanism to Mine is quite simple so it shouldn’t bring major issues.
-My final recommendation would be to pay more attention to the visibility of the functions since it’s quite important to define who’s supposed to executed the functions and to follow best practices regarding the use of assert, require etc. (which you are doing ;)
-This is a secure contract that will work as expected
+### Wrong Icons
+
+Sublime Text uses syntax scopes for file-specific icons. That's why icons of packages provided by the community require them to be installed.
+
+See the list of [community packages][packages] that you may need to install to see the right icon.
+
+### Themes
+
+If your theme supports an icon customization you can choose what icons you want to use – provided by the theme (by default) or provided by the package. Otherwise this package adds its own icons only.
+
+Themes that already have support of the icon customization include:
+
+* [Boxy Theme][boxy-theme]
+* [Material Theme][material-theme]
+
+### Troubleshooting
+
+If something goes wrong try to:
+
+1. Open `Command Palette` using menu item `Tools → Command Palette...`.
+2. Choose `A File Icon: Clean Patches`.
+3. Restart Sublime Text.
+
+## Developers
+
+### Bring Support of the File Icon Customization to Your Theme
+
+If you are a theme developer and you want to support a file icon customization, you should:
+
+* Remove all stuff related to the icon setup: `.tmPreferences`, `.sublime-settings`, `.sublime-syntax` and `.tmLanguage` files.
+* Rename all your existing icons to match [these ones][icons].
+* Add `.supports-a-file-icon-customization` file to the root of your theme (this is how we check if the theme **supports** customization of the file-specific icons).
+* Also you can provide [this script][installer] which recommends user to install `A File Icon` for enhanced support of the file-specific icons.
+
+### How It Works
+
+In simple terms, `A File Icon` does the following:
+
+1. Copies all the necessary files right after install or upgrade to `zzz A File Icon zzz` directory
+2. Searches all installed themes
+3. Checks if themes are already patched, if not
+4. Patches them by generating `<theme-name>.sublime-theme` files from a [template][template]
+5. For themes those support file icon customization, it provides `.tmPreferences` files and missing icons by default (user can override icons provided by the theme via `"force_mode": true`).
+
+The real process is just a little bit more complex to minimize hard drive I/O.
+
+### Contributing
+
+Want to contribute some code? Excellent! Read up on our [guidelines][contributing].
+
+## Resources
+
+### Colors
+
+Colors are from the [Boxy Theme][boxy-theme] icon color palette. They are bright because they should look good with most themes. However you can change color and opacity level of all icons. See [customization][customization].
+
+![Palette][img-palette]
+
+### Icons
+
+This package contains icons provided by:
+
+- [Atom File Icons][atom-file-icons]
+- [Boxy Theme][boxy-theme]
+- [Devicons][devicons]
+- [Font Awesome][font-awesome]
+- [Font Mfizz][font-mfizz]
+- [Icomoon][icomoon]
+- [Octicons][octicons]
+
+Source icons are provided in SVG format (Sublime Text doesn't currently support it). We convert them to @1x, @2x and @3x PNG assets before each release via a custom `gulp` task. 
+
+Rasterized icons can be found in `icons` folder.
+
+## Share The Love
+
+I've put a lot of time and effort into making **A File Icon** awesome. If you love it, you can buy me a coffee. I promise it will be a good investment 😉.
+
+**Donate with:** [Patreon][patreon].
+
+<!-- Resources -->
+
+[atom-file-icons]: https://github.com/file-icons/atom
+[boxy-theme]: https://github.com/ihodev/sublime-boxy
+[devicons]: http://vorillaz.github.io/devicons/#/main
+[font-awesome]: http://fontawesome.io/
+[font-mfizz]: http://fizzed.com/oss/font-mfizz
+[icomoon]: https://icomoon.io/
+[material-theme]: https://github.com/equinusocio/material-theme
+[octicons]: https://octicons.github.com/
+
+<!-- Misc -->
+
+[changelog]: https://github.com/ihodev/a-file-icon/blob/develop/CHANGELOG.md
+[coming-soon]: https://github.com/wbond/package_control_channel/pull/6109
+[contributing]: https://github.com/ihodev/a-file-icon/blob/develop/.github/CONTRIBUTING.md
+[customization]: https://github.com/ihodev/a-file-icon#customization
+[downloads]: https://packagecontrol.io/packages/A%20File%20Icon 'A File Icon @ Package Control'
+[forum]: https://forum.sublimetext.com/t/a-file-icon-sublime-file-specific-icons-for-improved-visual-grepping/25874
+[getting-started]: https://youtu.be/aTpuEhVHASw 'Watch "Getting Started with A File Icon" on YouTube'
+[gitter]: https://gitter.im/a-file-icon/Lobby
+[icons]: https://github.com/ihodev/a-file-icon/tree/develop/icons/multi
+[installer]: https://github.com/ihodev/sublime-boxy/blob/master/Icons.py
+[known-issues]: https://github.com/ihodev/a-file-icon/labels/known%20issue
+[new-issue]: https://github.com/ihodev/a-file-icon/issues/new
+[packages]: https://github.com/ihodev/a-file-icon/blob/develop/PACKAGES.md
+[patreon]: https://www.patreon.com/ihodev
+[release]: https://github.com/ihodev/a-file-icon/releases
+[stars]: https://github.com/ihodev/a-file-icon/stargazers
+[template]: https://github.com/ihodev/a-file-icon/blob/develop/common/templates/theme.py
+[issues]: https://github.com/ihodev/a-file-icon/issues
+[twitter]: https://twitter.com/intent/tweet?hashtags=sublimetext%2C%20file%2C%20icons&ref_src=twsrc%5Etfw&text=A%20File%20Icon%20%E2%80%93%20Sublime%20file%20icons%20for%20improved%20visual%20grepping%20%F0%9F%8E%89&tw_p=tweetbutton&url=https%3A%2F%2Fpackagecontrol.io%2Fpackages%2FA%2520File%2520Icon&via=afileicon
+
+<!-- Assets -->
+
+[img-downloads]: https://img.shields.io/packagecontrol/dt/A%20File%20Icon.svg?maxAge=3600&style=flat-square&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMTggMjIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDE4IDIyOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI%2BPHN0eWxlIHR5cGU9InRleHQvY3NzIj4uc3Qwe2ZpbGw6I0ZGRkZGRjt9PC9zdHlsZT48cGF0aCBjbGFzcz0ic3QwIiBkPSJNMTMuNCwyMEg0LjZDNC4zLDIwLDQsMTkuNyw0LDE5LjN2LTAuN0M0LDE4LjMsNC4zLDE4LDQuNiwxOGg4LjljMC4zLDAsMC42LDAuMywwLjYsMC43djAuN0MxNCwxOS43LDEzLjcsMjAsMTMuNCwyMHogTTguNiwxNi4yQzguMiwxNS45LDQsOS41LDQsOS41YzAtMC4yLDAuMi0wLjQsMC41LTAuNGgyLjhWMi41QzcuMywyLjIsNy43LDIsOC4yLDJoMS41YzAuNSwwLDAuOSwwLjIsMC45LDAuNXY2LjZoMi44YzAuMywwLDAuNSwwLjIsMC41LDAuNGwtNC42LDYuN0M5LjMsMTYuMiw4LjksMTYuNSw4LjYsMTYuMnoiLz48L3N2Zz4%3D&logoWidth=10
+[img-forum]: https://cdn.rawgit.com/ihodev/a-file-icon/develop/media/reply-on-forum.svg
+[img-getting-started]: https://cdn.rawgit.com/ihodev/a-file-icon/develop/media/getting-started.jpg
+[img-gitter]: https://cdn.rawgit.com/ihodev/a-file-icon/develop/media/chat-on-gitter.svg
+[img-logo]: https://cdn.rawgit.com/ihodev/a-file-icon/develop/media/logo.png
+[img-palette]: https://cdn.rawgit.com/ihodev/a-file-icon/develop/media/palette.png
+[img-patreon]: https://cdn.rawgit.com/ihodev/a-file-icon/develop/media/donate-on-patreon.svg
+[img-stars]: https://cdn.rawgit.com/ihodev/a-file-icon/develop/media/star-on-github.svg
+[img-twitter]: https://cdn.rawgit.com/ihodev/a-file-icon/develop/media/share-on-twitter.svg
