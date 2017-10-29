@@ -65,11 +65,11 @@ This token contract *doesn't prevent* Short Address Attacks
 Everything else looks good to me.
 ## 7. Line by line comments
 
-#Line 1:
+* Line 1:  
 You’re specifiying a pragma version with the caret symbol (^) up front which tells the compiler to use any version of solidity bigger than 0.4.11 .  
 This is not a good practice since there could be major changes between versions that would make your code unstable. That’s why I recommend to set a fixed version without the caret like 0.4.11.
 
-#Lines 51 to 58: (Prevention of short address attack)
+* Lines 51 to 58: (**Prevention of short address attack**)  
 ```
 function transfer(address _to, uint256 _value) public returns (bool) {
     require(_to != address(0));
@@ -97,7 +97,7 @@ function transfer(address _to, uint256 _value) onlyPayloadSize(2 * 32) public re
 }
 ```
 
-#Lines 161 to 168:- (no worries, the present code is good, it's optional if you want to change the following lines)
+* Lines 161 to 168:- (*no worries, the present code is good, it's optional if you want to change the following lines*)  
 ```
   uint256 _miningReward = 100000000; //1 AFC - To be halved every 4 years
   uint256 _maxMiningReward = 5000000000; //50 AFC - To be halved every 4 years
@@ -124,7 +124,7 @@ function transfer(address _to, uint256 _value) onlyPayloadSize(2 * 32) public re
 *(If you do this you won't need the constant functions returning these variables as marking a variable "public" automatically creates constant getter functions for the public variables)*
 **If this is done, lines from 246 to 283 aren't needed.**
 
-#Lines 218 to 219:
+* Lines 218 to 219:  
 ```
 if (now < _rewardEnd && _currentMined >= _maxMiningReward)
         revert();
@@ -135,7 +135,7 @@ if (now < _rewardEnd && _currentMined >= _maxMiningReward){
         revert();
 }
 ```
-[.][(I know this will not do anything but if a programmer wants to update the code in future and for any reason he did something like)]
+*(I know this will not do anything but if a programmer wants to update the code in future and for any reason he did something like:*
 
 ```
 if (now < _rewardEnd && _currentMined >= _maxMiningReward)
@@ -152,7 +152,7 @@ if (now < _rewardEnd && _currentMined >= _maxMiningReward){
 }
 ```
 it will do what's expected.
-[.][Don't think this is a little suggestion, there have been famous bugs where a programmer forgot to put {} and added additional statements and the logic turned upside down ;)]
+*Don't think this is a little suggestion, there have been famous bugs where a programmer forgot to put `{}` and added additional statements and the logic turned upside down 😉*
 
 
 ## 8. Summary of the audit
