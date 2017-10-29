@@ -13,22 +13,19 @@ In this Smart Contract audit we’ll cover the following topics:
 The audit makes no statements or warrantees about utility of the code, safety of the code, suitability of the business model, regulatory regime for the business model, or any other statements about fitness of the contracts to purpose, or their bug free status. The audit documentation is for discussion purposes only.
 ## 2. Overview
 The project has only one file, the AfricaCoin.sol file which contains 289 lines of Solidity code. All the functions and state variables are well commented using the natspec documentation for the functions which is good to understand quickly how everything is supposed to work.  
-*Nice Features*  
+*Nice Features:*  
 The contract provides a good suite of functionality that will be useful for the entire contract:
 It uses SafeMath library to check for overflows and underflows which is a pretty good practise, All the ERC20 functions are included it's a valid ERC20 token and in addition has some extra functionality for Mining.
 
 ## 3. Attacks made to the contract
-#In order to check for the security of the contract, we tested several attacks in order to make sure that the contract is secure and follows best practices.
-#[1.][Over and under flows]
-An overflow happens when the limit of the type varibale uint256 , 2 ** 256, is exceeded. What happens is that the value resets to zero instead of incrementing more.
-For instance, if I want to assign a value to a uint bigger than 2 ** 256 it will simple go to 0 — this is dangerous.
+#### In order to check for the security of the contract, we tested several attacks in order to make sure that the contract is secure and follows best practices.
+* Over and under flows
+An overflow happens when the limit of the type varibale uint256 , 2 ** 256, is exceeded. What happens is that the value resets to zero instead of incrementing more.  
+For instance, if I want to assign a value to a uint bigger than 2 ** 256 it will simple go to 0 — this is dangerous.  
 On the other hand, an underflow happens when you try to subtract 0 minus a number bigger than 0.
-For example, if you substract 0 - 1 the result will be = 2 ** 256 instead of -1.
-This is quite dangerous when dealing with ether. Hovewer This contract checks for overflows and underflows in **OpenZeppelin's** *SafeMath* and there is no instance of direct arithmetic operations.
-
-
-
-#[2.][Replay attack]
+For example, if you substract 0 - 1 the result will be = 2 ** 256 instead of -1.  
+This is quite dangerous. Hovewer This contract checks for overflows and underflows in **OpenZeppelin's** *SafeMath* and there is no instance of direct arithmetic operations.  
+* Replay attack
 The replay attack consists on making a transaction on one blockchain like the original Ethereum’s blockchain and then repeating it on another blockchain like the Ethereum’s classic blockchain.
 The ether is transfered like a normal transaction from a blockchain to another.
 Though its no longer a problem because since the version 1.5.3 of Geth and 1.4.4 of Parity both implement the attack protection EIP 155 by Vitalik Buterin: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
