@@ -144,8 +144,8 @@ It will break everything.
 but
 ```
 if (now < _rewardEnd && _currentMined >= _maxMiningReward){
- 		if (someOtherCondition) doSomethingElse();
-        revert();
+	if (someOtherCondition) doSomethingElse();
+    revert();
 }
 ```
 it will do what's expected.
