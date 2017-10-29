@@ -22,12 +22,12 @@ In order to check for the security of the contract, we tested several attacks in
 * **Over and under flows**
 An overflow happens when the limit of the type varibale uint256 , 2 ** 256, is exceeded. What happens is that the value resets to zero instead of incrementing more.  
   
-For instance, if I want to assign a value to a uint bigger than 2 ** 256 it will simple go to 0 — this is dangerous.  
+...For instance, if I want to assign a value to a uint bigger than 2 ** 256 it will simple go to 0 — this is dangerous.  
   
-On the other hand, an underflow happens when you try to subtract 0 minus a number bigger than 0.
+...On the other hand, an underflow happens when you try to subtract 0 minus a number bigger than 0.
 For example, if you substract 0 - 1 the result will be = 2 ** 256 instead of -1.  
   
-This is quite dangerous. Hovewer This contract checks for overflows and underflows in **OpenZeppelin's** *SafeMath* and there is no instance of direct arithmetic operations.  
+...This is quite dangerous. Hovewer This contract checks for overflows and underflows in **OpenZeppelin's** *SafeMath* and there is no instance of direct arithmetic operations.  
 * **Replay attack**
 The replay attack consists on making a transaction on one blockchain like the original Ethereum’s blockchain and then repeating it on another blockchain like the Ethereum’s classic blockchain.
 The ether is transfered like a normal transaction from a blockchain to another.
