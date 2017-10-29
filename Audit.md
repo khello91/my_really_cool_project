@@ -21,12 +21,12 @@ It uses SafeMath library to check for overflows and underflows which is a pretty
 In order to check for the security of the contract, we tested several attacks in order to make sure that the contract is secure and follows best practices.
 * **Over and under flows**
 An overflow happens when the limit of the type varibale uint256 , 2 ** 256, is exceeded. What happens is that the value resets to zero instead of incrementing more.  
-
+  
 For instance, if I want to assign a value to a uint bigger than 2 ** 256 it will simple go to 0 — this is dangerous.  
-
+  
 On the other hand, an underflow happens when you try to subtract 0 minus a number bigger than 0.
 For example, if you substract 0 - 1 the result will be = 2 ** 256 instead of -1.  
-
+  
 This is quite dangerous. Hovewer This contract checks for overflows and underflows in **OpenZeppelin's** *SafeMath* and there is no instance of direct arithmetic operations.  
 * **Replay attack**
 The replay attack consists on making a transaction on one blockchain like the original Ethereum’s blockchain and then repeating it on another blockchain like the Ethereum’s classic blockchain.
@@ -41,7 +41,6 @@ Then he buys tokens by removing the last zero:
 Buy 1000 tokens from account `0xiofa8d97756as7df5sd8f75g8675ds8gsdg`
 If the token contract has enought amount of tokens and the buy function doesn’t check the length of the address of the sender, the Ethereum’s virtual machine will just add zeroes to the transaction until the address is complete.
 The virtual machine will return 256000 for each 1000 tokens bought. This is a bug of the virtual machine that’s yet not fixed so whenever you want to buy tokens make sure to check the length of the address.
-
 The contract isn’t vulnerable to this attack since it doesn't have any Buy function but also it **does NOTHING to prevent** the *short address attack* during **ICO** or in an **exchange** (*it will just depend if the ICO contract or exchange server checks the length of data, if they don't, short address attacks would drain out this coin from the exchange*), here is a fix for it:
 https://www.reddit.com/r/ethereum/comments/63s917/worrysome_bug_exploit_with_erc20_token/dfwmhc3/?st=j9caq2b9&sh=23654dfc
 `modifier onlyPayloadSize(uint size) {  
