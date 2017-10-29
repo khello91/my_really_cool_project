@@ -30,7 +30,7 @@ An overflow happens when the limit of the type varibale uint256 , 2 ** 256, is e
 * **Replay attack**
 The replay attack consists on making a transaction on one blockchain like the original Ethereum’s blockchain and then repeating it on another blockchain like the Ethereum’s classic blockchain.
 The ether is transfered like a normal transaction from a blockchain to another.
-Though its no longer a problem because since the version 1.5.3 of Geth and 1.4.4 of Parity both implement the [attack protection EIP 155 by Vitalik Buterin:](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md)
+Though its no longer a problem because since the version 1.5.3 of Geth and 1.4.4 of Parity both implement the [attack protection EIP 155 by Vitalik Buterin](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md)  
 So the people that will use the contract depend on their own ability to be updated with those programs to keep themselves secure.
 
 * _**Short address attack**_
@@ -40,8 +40,7 @@ Then he buys tokens by removing the last zero:
 Buy 1000 tokens from account `0xiofa8d97756as7df5sd8f75g8675ds8gsdg`
 If the token contract has enought amount of tokens and the buy function doesn’t check the length of the address of the sender, the Ethereum’s virtual machine will just add zeroes to the transaction until the address is complete.
 The virtual machine will return 256000 for each 1000 tokens bought. This is a bug of the virtual machine that’s yet not fixed so whenever you want to buy tokens make sure to check the length of the address.
-The contract isn’t vulnerable to this attack since it doesn't have any Buy function but also it **does NOTHING to prevent** the *short address attack* during **ICO** or in an **exchange** (*it will just depend if the ICO contract or exchange server checks the length of data, if they don't, short address attacks would drain out this coin from the exchange*), here is a fix for it:
-https://www.reddit.com/r/ethereum/comments/63s917/worrysome_bug_exploit_with_erc20_token/dfwmhc3/?st=j9caq2b9&sh=23654dfc
+The contract isn’t vulnerable to this attack since it doesn't have any Buy function but also it **does NOTHING to prevent** the *short address attack* during **ICO** or in an **exchange** (*it will just depend if the ICO contract or exchange server checks the length of data, if they don't, short address attacks would drain out this coin from the exchange*), here is a [**fix for short address attacks**](https://www.reddit.com/r/ethereum/comments/63s917/worrysome_bug_exploit_with_erc20_token/dfwmhc3/?st=j9caq2b9&sh=23654dfc)
 ``` solidity
 modifier onlyPayloadSize(uint size) {  
     assert(msg.data.length >= size + 4);  
