@@ -15,7 +15,7 @@ The audit makes no statements or warrantees about utility of the code, safety of
 The project has only one file, the AfricaCoin.sol file which contains 289 lines of Solidity code. All the functions and state variables are well commented using the natspec documentation for the functions which is good to understand quickly how everything is supposed to work.  
 *Nice Features:*  
 The contract provides a good suite of functionality that will be useful for the entire contract:
-It uses SafeMath library to check for overflows and underflows which is a pretty good practise, All the ERC20 functions are included it's a valid ERC20 token and in addition has some extra functionality for Mining.
+It uses [SafeMath](https://github.com/OpenZeppelin/zeppelin-solidity/blob/master/contracts/math/SafeMath.sol) library to check for overflows and underflows which is a pretty good practise, All the ERC20 functions are included it's a valid ERC20 token and in addition has some extra functionality for Mining.
 
 ## 3. Attacks made to the contract
 In order to check for the security of the contract, we tested several attacks in order to make sure that the contract is secure and follows best practices.
@@ -26,7 +26,7 @@ An overflow happens when the limit of the type varibale uint256 , 2 ** 256, is e
   
   On the other hand, an underflow happens when you try to subtract 0 minus a number bigger than 0.For example, if you substract 0 - 1 the result will be = 2 ** 256 instead of -1.  
   
-  This is quite dangerous. Hovewer This contract checks for overflows and underflows in **OpenZeppelin's** *SafeMath* and there is no instance of direct arithmetic operations.  
+  This is quite dangerous. Hovewer This contract checks for overflows and underflows in [**OpenZeppelin's** *SafeMath*](https://github.com/OpenZeppelin/zeppelin-solidity/blob/master/contracts/math/SafeMath.sol) and there is no instance of direct arithmetic operations.  
 * **Replay attack**
 The replay attack consists on making a transaction on one blockchain like the original Ethereum’s blockchain and then repeating it on another blockchain like the Ethereum’s classic blockchain.
 The ether is transfered like a normal transaction from a blockchain to another.
@@ -35,11 +35,11 @@ So the people that will use the contract depend on their own ability to be updat
 
 * _**Short address attack**_
 This attack affects ERC20 tokens, was discovered by the Golem team and consists of the following:
-A user creates an ethereum wallet with a traling 0, which is not hard because it’s only a digit. For instance: `0xiofa8d97756as7df5sd8f75g8675ds8gsdg0`
-Then he buys tokens by removing the last zero:
-Buy 1000 tokens from account `0xiofa8d97756as7df5sd8f75g8675ds8gsdg`
-If the token contract has enought amount of tokens and the buy function doesn’t check the length of the address of the sender, the Ethereum’s virtual machine will just add zeroes to the transaction until the address is complete.
-The virtual machine will return 256000 for each 1000 tokens bought. This is a bug of the virtual machine that’s yet not fixed so whenever you want to buy tokens make sure to check the length of the address.
+A user creates an ethereum wallet with a traling 0, which is not hard because it’s only a digit. For instance: `0xiofa8d97756as7df5sd8f75g8675ds8gsdg0`  
+Then he buys tokens by removing the last zero:  
+Buy 1000 tokens from account `0xiofa8d97756as7df5sd8f75g8675ds8gsdg`  
+If the token contract has enought amount of tokens and the buy function doesn’t check the length of the address of the sender, the Ethereum’s virtual machine will just add zeroes to the transaction until the address is complete.  
+The virtual machine will return 256000 for each 1000 tokens bought. This is a bug of the virtual machine that’s yet not fixed so whenever you want to buy tokens make sure to check the length of the address.  
 The contract isn’t vulnerable to this attack since it doesn't have any Buy function but also it **does NOTHING to prevent** the *short address attack* during **ICO** or in an **exchange** (*it will just depend if the ICO contract or exchange server checks the length of data, if they don't, short address attacks would drain out this coin from the exchange*), here is a [**fix for short address attacks**](https://www.reddit.com/r/ethereum/comments/63s917/worrysome_bug_exploit_with_erc20_token/dfwmhc3/?st=j9caq2b9&sh=23654dfc)
 ``` solidity
 modifier onlyPayloadSize(uint size) {  
@@ -50,7 +50,7 @@ function transfer(address _to, uint256 _value) onlyPayloadSize(2 * 32) {
 	// do stuff  
 }  
 ```
-You can read more about the attack here: http://vessenes.com/the-erc20-short-address-attack-explained/
+You can read more about the attack here: [ERC20 Short Address Attacks](http://vessenes.com/the-erc20-short-address-attack-explained/)
 
 ## 4. Critical vulnerabilites found in the contract
 There aren’t critical issues in the smart contract audited.
@@ -61,7 +61,7 @@ Everything else looks good to me.
 ## 7. Line by line comments
 
 #Line 1:
-You’re specifiying a pragma version with the caret symbol (^) up front which tells the compiler to use any version of solidity bigger than 0.4.11 .
+You’re specifiying a pragma version with the caret symbol (^) up front which tells the compiler to use any version of solidity bigger than 0.4.11 .  
 This is not a good practice since there could be major changes between versions that would make your code unstable. That’s why I recommend to set a fixed version without the caret like 0.4.11.
 
 #Lines 51 to 58: (Prevention of short address attack)
