@@ -30,7 +30,7 @@ An overflow happens when the limit of the type varibale uint256 , 2 ** 256, is e
 * **Replay attack**
 The replay attack consists on making a transaction on one blockchain like the original Ethereum’s blockchain and then repeating it on another blockchain like the Ethereum’s classic blockchain.
 The ether is transfered like a normal transaction from a blockchain to another.
-Though its no longer a problem because since the version 1.5.3 of Geth and 1.4.4 of Parity both implement the attack protection EIP 155 by Vitalik Buterin: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
+Though its no longer a problem because since the version 1.5.3 of Geth and 1.4.4 of Parity both implement the [attack protection EIP 155 by Vitalik Buterin:](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md)
 So the people that will use the contract depend on their own ability to be updated with those programs to keep themselves secure.
 
 * _**Short address attack**_
