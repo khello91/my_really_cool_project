@@ -1,10 +1,16 @@
 **Introduction**
 In this Smart Contract audit we’ll cover the following topics:
+
 #Disclaimer
+
 #Overview of the audit and nice features
+
 #Attack made to the contract
+
 #Critical vulnerabilites found in the contract
+
 #Medium vulnerabilites found in the contract
+
 #Low severity vulnerabilites found
 
 Summary of the audit
