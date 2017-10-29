@@ -12,12 +12,12 @@ In this Smart Contract audit we’ll cover the following topics:
 ## 1. Disclaimer
 The audit makes no statements or warrantees about utility of the code, safety of the code, suitability of the business model, regulatory regime for the business model, or any other statements about fitness of the contracts to purpose, or their bug free status. The audit documentation is for discussion purposes only.
 ## 2. Overview
-The project has only one file, the AfricaCoin.sol file which contains 289 lines of Solidity code. All the functions and state variables are well commented using the natspec documentation for the functions which is good to understand quickly how everything is supposed to work.
-*Nice Features*
+The project has only one file, the AfricaCoin.sol file which contains 289 lines of Solidity code. All the functions and state variables are well commented using the natspec documentation for the functions which is good to understand quickly how everything is supposed to work.  
+*Nice Features*  
 The contract provides a good suite of functionality that will be useful for the entire contract:
 It uses SafeMath library to check for overflows and underflows which is a pretty good practise, All the ERC20 functions are included it's a valid ERC20 token and in addition has some extra functionality for Mining.
 
-3. **Attacks made to the contract**
+## 3. Attacks made to the contract
 #In order to check for the security of the contract, we tested several attacks in order to make sure that the contract is secure and follows best practices.
 #[1.][Over and under flows]
 An overflow happens when the limit of the type varibale uint256 , 2 ** 256, is exceeded. What happens is that the value resets to zero instead of incrementing more.
@@ -53,13 +53,13 @@ https://www.reddit.com/r/ethereum/comments/63s917/worrysome_bug_exploit_with_erc
   }`
 You can read more about the attack here: http://vessenes.com/the-erc20-short-address-attack-explained/
 
-4. **Critical vulnerabilites found in the contract**
+## 4. Critical vulnerabilites found in the contract
 There aren’t critical issues in the smart contract audited.
-5. **Medium vulnerabilites found in the contract**
+## 5. Medium vulnerabilites found in the contract
 This token contract *doesn't prevent* Short Address Attacks
-6. **Low severity vulnerabilites found**
+## 6. Low severity vulnerabilites found
 Everything else looks good to me.
-7. **Line by line comments**
+## 7. Line by line comments
 
 #Line 1:
 You’re specifiying a pragma version with the caret symbol (^) up front which tells the compiler to use any version of solidity bigger than 0.4.11 .
@@ -139,7 +139,7 @@ it will do what's expected.
 [.][Don't think this is a little suggestion, there have been famous bugs where a programmer forgot to put {} and added additional statements and the logic turned upside down ;)]
 
 
-8. **Summary of the audit**
+## 8. Summary of the audit
 Overall the code is well commented and clear on what it’s supposed to do for each function.
 The mechanism to Mine is quite simple so it shouldn’t bring major issues.
 My final recommendation would be to pay more attention to the visibility of the functions since it’s quite important to define who’s supposed to executed the functions and to follow best practices regarding the use of assert, require etc. (which you are doing ;)
