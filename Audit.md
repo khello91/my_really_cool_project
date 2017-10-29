@@ -9,9 +9,9 @@ In this Smart Contract audit we’ll cover the following topics:
 7. Line by line comments
 8. Summary of the audit
 
-## 1. **Disclaimer**
+## 1. Disclaimer
 The audit makes no statements or warrantees about utility of the code, safety of the code, suitability of the business model, regulatory regime for the business model, or any other statements about fitness of the contracts to purpose, or their bug free status. The audit documentation is for discussion purposes only.
-## 2. **Overview**
+## 2. Overview
 The project has only one file, the AfricaCoin.sol file which contains 289 lines of Solidity code. All the functions and state variables are well commented using the natspec documentation for the functions which is good to understand quickly how everything is supposed to work.
 *Nice Features*
 The contract provides a good suite of functionality that will be useful for the entire contract:
