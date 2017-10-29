@@ -18,7 +18,7 @@ The contract provides a good suite of functionality that will be useful for the 
 It uses SafeMath library to check for overflows and underflows which is a pretty good practise, All the ERC20 functions are included it's a valid ERC20 token and in addition has some extra functionality for Mining.
 
 ## 3. Attacks made to the contract
-In order to check for the security of the contract, we tested several attacks in order to make sure that the contract is secure and follows best practices.
+	In order to check for the security of the contract, we tested several attacks in order to make sure that the contract is secure and follows best practices.
 ### Over and under flows
 An overflow happens when the limit of the type varibale uint256 , 2 ** 256, is exceeded. What happens is that the value resets to zero instead of incrementing more.  
 
