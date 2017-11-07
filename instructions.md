@@ -11,7 +11,7 @@ These are instructions on how to use ERC20 token contract and ICO contract deplo
 
 	In https://wallet.ethereum.org go to `contracts -> watch token`, paste the contract address for token.
 
-	Send the tokens which you want to sell, to [ICO contract address](https://etherscan.io/address/0x88aa2aa27cabfbf2245448d368fd336641477f0e#code) (`0x88aa2aa27cabfbf2245448d368fd336641477f0e`).
+	Send the tokens which you want to sell, to [ICO contract address](https://etherscan.io/address/0x88aa2aa27cabfbf2245448d368fd336641477f0e#code) (`0x88aa2aa27cabfbf2245448d368fd336641477f0e`), from https://wallet.ethereum.org -> `Send` -> Click on CubaazCoin (Or your token) and send the amount you wanna send.
 
 	In https://wallet.ethereum.org, go to `contracts -> watch contract` paste the **contract address** and **ABI** for ICO contract, give it any name, after it is added to wallet click on it, from `pick a function` click `start sale` put a delay of 0 and execute. It's Started!
 
