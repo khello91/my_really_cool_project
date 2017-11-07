@@ -14,7 +14,16 @@ These are instructions on how to use ERC20 token contract and ICO contract deplo
 	})
 	```
 
-2. To show the Tokens Sold, track the Token balance of ICO smart contract using [Etherscan API](https://etherscan.io/apis#tokens), and then divide the balance by 10<sup>decimals</sup>, eg. if your token has 8 decimals, divide it by 10<sup>8</sup>, and then subtract it from the initial token balance of ICO smart contract.
+2. To show the Tokens Sold, track the Token balance of ICO smart contract using [Etherscan API](https://etherscan.io/apis#tokens), and then divide the balance by 10<sup>decimals</sup>, eg. if your token has 8 decimals, divide it by 10<sup>8</sup>, and then subtract it from the initial token balance of ICO smart contract.  
+	2.1 eg. for [CubaazCoin ICO](https://etherscan.io/address/0x88aa2aa27cabfbf2245448d368fd336641477f0e#code), use this: https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x452B8B085CED1968b6faDE6C2Dcf608c5c297F31&address=0x88aa2aa27cabfbf2245448d368fd336641477f0e&tag=latest and divide it by 10<sup>8</sup>
+	``` javascript
+	$.get("https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x452B8B085CED1968b6faDE6C2Dcf608c5c297F31&address=0x88aa2aa27cabfbf2245448d368fd336641477f0e&tag=latest")
+	.then(function(data){
+		console.log(BALANCE = data.result/Math.pow(10,8))
+	})
+	// And then subtract it from inital ICO balance
+	// TOKENS_SOLD = INITIAL_ICO_BALANCE - BALANCE
+	```
 
 ## ERC20 Token
 
